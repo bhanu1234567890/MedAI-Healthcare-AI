@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedAI Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .left {
+      flex: 1;
+      background: linear-gradient(to bottom right, #0f4c75, #3282b8);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem;
+    }
+
+    .left h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .left p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .features {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .feature-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      width: 180px;
+    }
+
+    .feature-box h4 {
+      margin-bottom: 0.3rem;
+    }
+
+    .right {
+      flex: 1;
+      background: #0d1117;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .form-container h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 6px;
+    }
+
+    .form-container input[type="email"],
+    .form-container input[type="password"] {
+      background: #1f2937;
+      color: white;
+    }
+
+    .form-container label {
+      font-size: 0.9rem;
+    }
+
+    .form-container .options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .google-login {
+      margin-top: 1rem;
+      background: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .google-login img {
+      height: 18px;
+      margin-right: 8px;
+    }
+
+    .signup {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .signup a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="left">
+    <div class="logo">MedAI</div>
+    <h1>Healthcare AI Platform</h1>
+    <p>Secure access to advanced medical AI tools for healthcare professionals.</p>
+    <div class="features">
+      <div class="feature-box">
+        <h4>Secure Access</h4>
+        <p>Multi-factor authentication and data encryption</p>
+      </div>
+      <div class="feature-box">
+        <h4>AI Diagnostics</h4>
+        <p>Advanced algorithms for clinical decision support</p>
+      </div>
+    </div>
+    <p style="margin-top: auto; font-size: 0.8rem;">&copy; 2025 MedAI Health Technologies. All rights reserved.</p>
+  </div>
+  <div class="right">
+    <div class="form-container">
+      <h2>Welcome back</h2>
+      <p>Sign in to your account to continue</p>
+      
+      <!-- ✅ Updated Form -->
+      <form method="POST" action="/login">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" placeholder="admin@example.com" required>
+
+        <label for="password">Password *</label>
+        <input type="password" id="password" name="password" placeholder="password" required>
+
+        <div class="options">
+          <label><input type="checkbox"> Remember me</label>
+          <a href="#" style="color: #60a5fa; text-decoration: none;">Forgot password?</a>
+        </div>
+
+        <button type="submit">Sign In</button>
+      </form>
+
+      <button class="google-login">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon" />
+        Continue with Google
+      </button>
+
+      <div class="signup">
+        Don't have an account? <a href="#">Sign up</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

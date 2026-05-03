@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Basic reset to ensure consistency across browsers */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e9ecef; /* Light gray background */
+            color: #343a40; /* Dark gray text */
+            display: flex;
+            min-height: 100vh;
+            margin: 0; /* Reset body margin */
+        }
+        .sidebar {
+            background-color: #20639B; /* A deeper blue */
+            color: #fff;
+            width: 280px; /* Slightly wider sidebar */
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; /* Adjusted gap */
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            font-size: 2.2rem; /* Slightly larger heading */
+            margin-bottom: 2rem; /* Adjusted margin */
+            font-weight: 600;
+            text-align: center;
+            color: #f8f9fa; /* Light text for heading */
+        }
+        .sidebar a {
+            color: #e0f2f7; /* Lighter blue for links */
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.3rem; /* Slightly less rounded */
+            transition: background-color 0.2s ease; /* Faster transition */
+            display: block;
+        }
+        .sidebar a:hover,
+        .sidebar a.active { /* Style for the active link */
+            background-color: #174974; /* Darker blue on hover/active */
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem; /* Reduced padding */
+            display: flex;
+            background-color: #f8f9fa; /* Light background for content */
+        }
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-right: 20px;
+        }
+        h1 {
+            color: #20639B; /* Same blue as sidebar */
+            margin-bottom: 1.5rem; /* Adjusted margin */
+            font-weight: 700; /* Stronger heading weight */
+            font-size: 2.5rem;
+        }
+        h3 {
+            color: #388E3C; /* A nice green for subheadings */
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #d4edda; /* Light green border */
+            padding-bottom: 0.4rem;
+            font-size: 1.6rem;
+            font-weight: 500;
+        }
+        .section {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Softer shadow */
+        }
+        #medication-input label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #495057; /* Slightly darker label text */
+            font-weight: bold;
+        }
+        #medication-input input[type="text"] {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ced4da; /* Light gray border */
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #388E3C; /* Green button */
+            color: #fff;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s ease;
+        }
+        button:hover {
+            background-color: #2E7D32; /* Darker green on hover */
+        }
+        #medication-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        #medication-list li {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.3rem;
+            padding: 0.8rem;
+            margin-bottom: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .medication-item strong {
+            font-weight: 600;
+            color: #20639B; /* Blue medication name */
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+        .right-panel {
+            width: 320px; /* Slightly wider right panel */
+            background-color: #f8f9fa;
+            border-left: 1px solid #dee2e6;
+            padding: 1.5rem; /* Reduced padding */
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+            color: #495057;
+        }
+        .right-panel h4 {
+            color: #388E3C; /* Green heading for right panel */
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #d4edda;
+            padding-bottom: 0.3rem;
+        }
+        footer {
+            background-color: #343a40; /* Dark gray footer */
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            border-radius: 0 0 0.5rem 0.5rem; /* Match content area */
+            margin-top: 2rem;
+        }
+        /* Hide sections by default, show the first one */
+        #medication-input-section, #medication-list-section, #reminders-section, #chatbot-section {
+            display: none;
+        }
+        #medication-input-section {
+            display: block;
+        }
+        /* Styles for the reminder section */
+        #add-reminder-form {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.3rem;
+            background-color: #fff;
+        }
+        #add-reminder-form h4 {
+            color: #388E3C;
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-bottom: 1px solid #d4edda;
+            padding-bottom: 0.2rem;
+        }
+        #add-reminder-form label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #495057;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        #add-reminder-form input[type="text"],
+        #add-reminder-form input[type="time"] {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+        #reminders-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+        #reminders-list li {
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 0.3rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        .reminder-item strong {
+            font-weight: bold;
+            color: #20639B;
+        }
+        .reminder-actions button {
+            background-color: #dc3545; /* Red for remove */
+            color: #fff;
+            border: none;
+            border-radius: 0.2rem;
+            padding: 0.4rem 0.6rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.2s ease;
+            margin-left: 0.5rem;
+        }
+        .reminder-actions button:hover {
+            background-color: #c82333;
+        }
+        /* Chatbot styles */
+        #chatbot-output {
+            border: 1px solid #ced4da;
+            border-radius: 0.3rem;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+        }
+        #chatbot-input {
+            flex-grow: 1;
+            padding: 0.7rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+        #chatbot-section button {
+            background-color: #20639B; /* Blue for send button */
+        }
+        #chatbot-section button:hover {
+            background-color: #174974;
+        }
+        .medication-details {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #eee;
+            border-radius: 0.3rem;
+            background-color: #f9f9f9;
+            font-size: 0.9rem;
+            white-space: pre-line; /* Preserve line breaks from the explanation */
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex;">
+        <div class="sidebar">
+            <h2>MedAI</h2>
+            <a href="#medication-input-section" class="active">Add Medication</a>
+            <a href="#medication-list-section">Medication List</a>
+            <a href="#reminders-section">Reminders</a>
+            <a href="#chatbot-section">Chatbot</a>
+        </div>
+        <div class="main-content">
+            <div class="content-area">
+                <h1>Medication Companion</h1>
+                <section id="medication-input-section" class="section">
+                    <h3>Add Medication</h3>
+                    <form id="add-medication-form">
+                        <label for="medication-name">Medication Name:</label>
+                        <input type="text" id="medication-name" name="medication-name" placeholder="Enter medication name" required><br><br>
+                        <button type="submit">Add Medication</button>
+                    </form>
+                </section>
+
+                <section id="medication-list-section" class="section">
+                    <h3>Medication List & Explanations</h3>
+                    <ul id="medications">
+                        </ul>
+                </section>
+
+                <section id="reminders-section" class="section">
+                    <h3>Reminders</h3>
+                    <form id="add-reminder-form">
+                        <h4>Add New Reminder</h4>
+                        <label for="reminder-medication">Medication:</label>
+                        <input type="text" id="reminder-medication" name="reminder-medication" placeholder="Enter medication name" required><br><br>
+                        <label for="reminder-time">Time:</label>
+                        <input type="time" id="reminder-time" name="reminder-time" required><br><br>
+                        <button type="submit">Add Reminder</button>
+                    </form>
+                    <h4>Current Reminders</h4>
+                    <ul id="reminders-list">
+                        </ul>
+                </section>
+
+                <section id="chatbot-section" class="section">
+                    <h3>Adherence Chatbot</h3>
+                    <div id="chatbot-output">
+                        </div>
+                    <div style="display: flex;">
+                        <input type="text" id="chatbot-input" placeholder="Type your message...">
+                        <button id="send-chatbot-button">Send</button>
+                    </div>
+                </section>
+            </div>
+            <div class="right-panel">
+                <div id="right-panel-content">
+                    <h4>Information</h4>
+                    <p>Select a section from the navigation to view relevant details here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 Medication Companion</p>
+    </footer>
+
+    <script>
+        // Declare global variables for the lists
+        const medicationListUl = document.getElementById('medications');
+        const remindersListUl = document.getElementById('reminders-list');
+
+        // --- Medication Management Functions ---
+        function removeMedication(medicationName) {
+            fetch(`/api/remove_medication/${medicationName}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    fetchMedications(); // Refresh the list after removal
+                } else {
+                    alert('Failed to remove medication: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error removing medication:', error);
+                alert('An error occurred while removing the medication.');
+            });
+        }
+
+        function fetchMedications() {
+            fetch('/api/medicines')
+                .then(response => response.json())
+                .then(data => {
+                    medications = data.medicines;
+                    renderMedicationList(medications);
+                })
+                .catch(error => {
+                    console.error('Error fetching medications:', error);
+                    medicationListUl.innerHTML = '<p>Failed to load medications.</p>';
+                });
+        }
+
+        function renderMedicationList(meds) {
+            medicationListUl.innerHTML = '';
+            meds.forEach(med => {
+                const listItem = document.createElement('li');
+                listItem.className = 'medication-item';
+                listItem.innerHTML = `
+                    <strong>${med}</strong>
+                    <div>
+                        <button onclick="fetchExplanation('${med}', this)">Details</button>
+                        <button onclick="removeMedication('${encodeURIComponent(med)}')">Remove</button>
+                    </div>
+                `;
+                medicationListUl.appendChild(listItem);
+            });
+        }
+
+        function fetchExplanation(medicationName, buttonElement) {
+            fetch(`/api/medicine-explanation`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: medicationName }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.explanation) {
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.className = 'medication-details';
+                    detailsDiv.textContent = data.explanation;
+
+                    const existingDetails = buttonElement.parentNode.parentNode.querySelector('.medication-details');
+                    if (existingDetails) {
+                        existingDetails.remove();
+                        buttonElement.textContent = 'Details';
+                    } else {
+                        buttonElement.parentNode.parentNode.appendChild(detailsDiv);
+                        buttonElement.textContent = 'Hide Details';
+                    }
+                } else {
+                    alert(`No explanation found for ${medicationName}.`);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching explanation:', error);
+                alert('Failed to fetch medication details.');
+            });
+        }
+
+        // --- Reminder Management Functions ---
+        function removeReminder(reminderId) {
+            fetch(`/api/remove-reminder/${reminderId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    fetchReminders(); // Refresh the reminders list
+                } else {
+                    alert('Failed to remove reminder: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error removing reminder:', error);
+                alert('An error occurred while removing the reminder.');
+            });
+        }
+
+        function fetchReminders() {
+            fetch('/api/reminders')
+                .then(response => response.json())
+                .then(data => {
+                    reminders = data.reminders;
+                    renderRemindersList(reminders);
+                })
+                .catch(error => {
+                    console.error('Error fetching reminders:', error);
+                    remindersListUl.innerHTML = '<p>Failed to load reminders.</p>';
+                });
+        }
+
+        function renderRemindersList(reminders) {
+            remindersListUl.innerHTML = '';
+            reminders.forEach(reminder => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span class="reminder-item"><strong>${reminder.medication}</strong> at ${reminder.time}</span>
+                    <div class="reminder-actions">
+                        <button onclick="removeReminder(${reminder.id})">Remove</button>
+                    </div>
+                `;
+                remindersListUl.appendChild(listItem);
+            });
+        }
+
+        
+    function speakReminder(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+    }
+
+    function checkAndSpeakReminders() {
+        const now = new Date();
+        const currentTime = now.toTimeString().slice(0, 5); // Format: HH:MM
+
+        reminders.forEach(reminder => {
+            if (reminder.time === currentTime && !reminder.notified) {
+                speakReminder(`Time to take your medication: ${reminder.medication}`);
+                reminder.notified = true;
+
+                // Reset notified status after 61 seconds
+                setTimeout(() => {
+                    reminder.notified = false;
+                }, 61000);
+            }
+        });
+    }
+
+document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+            const sections = {
+                'medication-input-section': { element: document.getElementById('medication-input-section'), rightPanelContent: '<h4>Add Medication Tips</h4><p>Enter the full name of your medication as prescribed by your doctor. Double-check spelling for accuracy.</p>' },
+                'medication-list-section': { element: document.getElementById('medication-list-section'), rightPanelContent: '<h4>Medication List Information</h4><p>Here you will see a list of your added medications and options to view more details or explanations.</p>' },
+                'reminders-section': { element: document.getElementById('reminders-section'), rightPanelContent: '<h4>Setting Reminders</h4><p>Add and manage your medication reminders to ensure timely intake.</p>' },
+                'chatbot-section': { element: document.getElementById('chatbot-section'), rightPanelContent: '<h4>Using the Chatbot</h4><p>Ask the chatbot any questions you have about your medications, adherence, or general well-being.</p>' }
+            };
+            const rightPanelContentDiv = document.getElementById('right-panel-content');
+            const addReminderForm = document.getElementById('add-reminder-form');
+            const addMedicationForm = document.getElementById('add-medication-form');
+            const chatbotInput = document.getElementById('chatbot-input');
+            const sendChatbotButton = document.getElementById('send-chatbot-button');
+            const chatbotOutput = document.getElementById('chatbot-output');
+            let medications = []; // To store fetched medications
+            let reminders = [];   // To store fetched reminders
+
+            function updateRightPanel(content) {
+                rightPanelContentDiv.innerHTML = '<h4>Information</h4>' + content;
+            }
+
+            updateRightPanel(sections['medication-input-section'].rightPanelContent);
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+
+                    // Remove active class from all links
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+
+                    // Add active class to the clicked link
+                    this.classList.add('active');
+
+                    for (const id in sections) {
+                        sections[id].element.style.display = 'none';
+                    }
+                    if (sections[targetId]) {
+                        sections[targetId].element.style.display = 'block';
+                        updateRightPanel(sections[targetId].rightPanelContent);
+                        if (targetId === 'medication-list-section') {
+                            fetchMedications();
+                        } else if (targetId === 'reminders-section') {
+                            fetchReminders();
+                        }
+                    }
+                });
+            });
+
+            // --- Medication Management ---
+            addMedicationForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const medicationName = document.getElementById('medication-name').value;
+                if (medicationName) {
+                    fetch('/add_medication', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name: medicationName }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            document.getElementById('medication-name').value = '';
+                            fetchMedications(); // Refresh the medication list
+                        } else {
+                            alert('Failed to add medication: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error adding medication:', error);
+                        alert('An error occurred while adding medication.');
+                    });
+                }
+            });
+
+            // --- Reminder Management ---
+            addReminderForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const medication = document.getElementById('reminder-medication').value;
+                const time = document.getElementById('reminder-time').value;
+                if (medication && time) {
+                    fetch('/api/add-reminder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ medication: medication, time: time }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success' && data.reminder) {
+                            document.getElementById('reminder-medication').value = '';
+                            document.getElementById('reminder-time').value = '';
+                            fetchReminders(); // Refresh the reminders list
+                        } else {
+                            alert('Failed to add reminder: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error adding reminder:', error);
+                        alert('An error occurred while adding reminder.');
+                    });
+                }
+            });
+
+            // --- Chatbot Interaction ---
+            sendChatbotButton.addEventListener('click', function() {
+                const message = chatbotInput.value.trim();
+                if (message) {
+                    chatbotOutput.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+                    chatbotInput.value = '';
+                    fetch('/api/adherence-coach', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.reply) {
+                            chatbotOutput.innerHTML += `<p><strong>Bot:</strong> ${data.reply}</p>`;
+                            chatbotOutput.scrollTop = chatbotOutput.scrollHeight; // Scroll to bottom
+                        } else {
+                            chatbotOutput.innerHTML += '<p><strong>Bot:</strong> No response received.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error communicating with chatbot:', error);
+                        chatbotOutput.innerHTML += '<p><strong>Bot:</strong> Error communicating with the chatbot.</p>';
+                    });
+                }
+            });
+
+            chatbotInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    sendChatbotButton.click();
+                }
+            });
+
+            setInterval(checkAndSpeakReminders, 60000); // Check reminders every minute
+
+// Initial fetch when the Medication List or Reminders tab is opened
+            if (window.location.hash === '#medication-list-section') {
+                fetchMedications();
+            } else if (window.location.hash === '#reminders-section') {
+                fetchReminders();
+            }
+        });
+    </script>
+
+</body>
+</html>
