@@ -33,7 +33,7 @@ MedAI is an AI-driven healthcare assistant designed to improve patient understan
 Bhanu Pratap
 
 ## Authorship
-This project was developed as part of a team internship. 
+This project was developed as part of a College (Final year Project). 
 My contributions: backend (Flask), AI integration (API + chatbot), and system design.
 
 ## Setup Instructions
