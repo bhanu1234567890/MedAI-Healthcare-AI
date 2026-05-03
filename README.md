@@ -31,3 +31,20 @@ MedAI is an AI-driven healthcare assistant designed to improve patient understan
 
 ## Author
 Bhanu Pratap
+
+## Authorship
+This project was developed as part of a team internship. 
+My contributions: backend (Flask), AI integration (API + chatbot), and system design.
+
+## Setup Instructions
+
+1. Create a `.env` file in the root directory  
+2. Add your API key:
+
+GROQ_API_KEY=your_api_key_here
+
+3. Install dependencies:
+pip install -r requirements.txt
+
+4. Run the app:
+python app.py
