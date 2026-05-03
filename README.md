@@ -141,7 +141,7 @@ MedAI is designed for:
 
 ## 👨‍💻 Authorship
 
-This project was developed as part of a team internship.
+This project was developed as part of a team final year Bachelor's of technology AI Project.
 My primary contributions include:
 
 * Backend development using Flask
