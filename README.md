@@ -5,6 +5,7 @@
 MedAI is an AI-powered healthcare web application designed to improve medication adherence and patient understanding of prescriptions. The system leverages AI to simplify complex medical information, provide interactive chatbot support, and deliver timely medication reminders.
 
 This project demonstrates the practical application of Artificial Intelligence in healthcare, focusing on usability, accessibility, and real-world impact.
+While the project was developed collaboratively, the design and implementation of the backend architecture and AI integration were carried out independently.
 
 ---
 
